@@ -72,10 +72,17 @@ async function fetchMarketData(car) {
     condition: car.condition || "",
     mileage: car.mileage != null ? String(car.mileage) : "",
   });
-  const res = await fetch(`${MARKET_API}/api/market?${params}`);
+  let res;
+  try {
+    res = await fetch(`${MARKET_API}/api/market?${params}`);
+  } catch {
+    throw new Error("can't reach server"); // network / CORS / offline
+  }
+  if (res.status === 404) throw new Error("no market data for this vehicle");
   if (!res.ok) throw new Error("market api " + res.status);
   const m = await res.json();
-  if (![m.low, m.average, m.high].every((n) => Number.isFinite(n))) throw new Error("no data");
+  if (![m.low, m.average, m.high].every((n) => Number.isFinite(n)))
+    throw new Error("no market data for this vehicle");
   return {
     low: Math.round(m.low), average: Math.round(m.average), high: Math.round(m.high),
     currency: m.currency || "USD",
@@ -187,12 +194,15 @@ function CarRow({ car, rank, isTop, onRefresh, onEdit, onDelete, index }) {
 
       {!loading && car.market && <RangeBar market={car.market} best={best} />}
 
-      {error && (
-        <div className="mono" style={{ marginTop: 10, fontSize: 10.5, color: "var(--red)", display: "flex", alignItems: "center", gap: 6 }}>
-          <AlertTriangle size={12} /> fetch failed
-          <button className="linkbtn" onClick={() => onRefresh(car)} style={{ color: "var(--cyan)" }}>retry ▸</button>
-        </div>
-      )}
+      {error && (() => {
+        const noData = (car.marketError || "").includes("no market data");
+        return (
+          <div className="mono" style={{ marginTop: 10, fontSize: 10.5, color: noData ? "var(--amber)" : "var(--red)", display: "flex", alignItems: "center", gap: 6 }}>
+            <AlertTriangle size={12} /> {car.marketError || "fetch failed"}
+            <button className="linkbtn" onClick={() => onRefresh(car)} style={{ color: "var(--cyan)" }}>retry ▸</button>
+          </div>
+        );
+      })()}
       {!loading && !car.market && !error && (
         <button className="linkbtn" onClick={() => onRefresh(car)} style={{ marginTop: 10, fontSize: 10.5, color: "var(--green)", display: "inline-flex", alignItems: "center", gap: 5 }}>
           <Search size={11} /> FETCH LIVE US MARKET ▸
@@ -361,9 +371,9 @@ export default function App() {
     setCars((cs) => cs.map((c) => (c.id === car.id ? { ...c, marketStatus: "loading" } : c)));
     try {
       const market = await fetchMarketData(car);
-      setCars((cs) => cs.map((c) => (c.id === car.id ? { ...c, market, marketStatus: "idle" } : c)));
+      setCars((cs) => cs.map((c) => (c.id === car.id ? { ...c, market, marketStatus: "idle", marketError: null } : c)));
     } catch (e) {
-      setCars((cs) => cs.map((c) => (c.id === car.id ? { ...c, marketStatus: "error" } : c)));
+      setCars((cs) => cs.map((c) => (c.id === car.id ? { ...c, marketStatus: "error", marketError: e.message } : c)));
     }
   }, []);
 
