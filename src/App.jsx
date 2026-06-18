@@ -19,11 +19,11 @@ const STORAGE_KEY = "apex_terminal_garage_v2";
 const COL = 480;
 
 const TIERS = {
-  great:  { word: "GREAT DEAL",  color: "#4dffb0" },
-  below:  { word: "BELOW MKT",   color: "#34e89e" },
-  market: { word: "AT MARKET",   color: "#ffc24b" },
-  above:  { word: "ABOVE MKT",   color: "#ff8f6b" },
-  over:   { word: "OVERPRICED",  color: "#ff6b6b" },
+  great:  { word: "GREAT DEAL",  color: "#7FE6B8" },
+  below:  { word: "BELOW MKT",   color: "#5FCFA0" },
+  market: { word: "AT MARKET",   color: "#D8C08A" },
+  above:  { word: "ABOVE MKT",   color: "#C9A24B" },
+  over:   { word: "OVERPRICED",  color: "#C45B5B" },
 };
 
 /* ---------- helpers ---------- */
@@ -107,9 +107,9 @@ function RangeBar({ market, best }) {
         <span style={{ color: "var(--muted)" }}>MARKET RANGE</span>
         <span>{usd(high)}</span>
       </div>
-      <div style={{ position: "relative", height: 6, borderRadius: 6, background: "linear-gradient(90deg, rgba(77,255,176,.45), rgba(255,194,75,.4) 55%, rgba(255,107,107,.45))" }}>
+      <div style={{ position: "relative", height: 6, borderRadius: 6, background: "linear-gradient(90deg, rgba(127,230,184,.45), rgba(216,192,138,.4) 55%, rgba(196,91,91,.45))" }}>
         <div style={{ position: "absolute", left: avgPos + "%", top: -3, width: 2, height: 12, background: "var(--muted)", transform: "translateX(-1px)", borderRadius: 2 }} />
-        <div style={{ position: "absolute", left: bestPos + "%", top: "50%", width: 13, height: 13, borderRadius: 13, background: belowRange ? "var(--green-bright)" : "#fff", border: "2px solid var(--bg)", boxShadow: best != null ? "0 0 0 2px rgba(77,255,176,.55), 0 0 10px rgba(77,255,176,.5)" : "none", transform: "translate(-50%,-50%)" }} />
+        <div style={{ position: "absolute", left: bestPos + "%", top: "50%", width: 13, height: 13, borderRadius: 13, background: belowRange ? "var(--green-bright)" : "var(--text)", border: "2px solid var(--bg)", boxShadow: best != null ? "0 0 0 2px rgba(127,230,184,.4), 0 0 10px rgba(127,230,184,.35)" : "none", transform: "translate(-50%,-50%)" }} />
       </div>
     </div>
   );
@@ -154,7 +154,7 @@ function CarRow({ car, rank, isTop, onRefresh, onEdit, onDelete, index }) {
   const error = car.marketStatus === "error";
 
   return (
-    <div className="term-card term-rise" style={{ animationDelay: Math.min(index * 45, 400) + "ms", borderColor: isTop ? "rgba(77,255,176,.45)" : "var(--border)", boxShadow: isTop ? "0 0 0 1px rgba(77,255,176,.25), 0 0 28px rgba(77,255,176,.07)" : "none" }}>
+    <div className="term-card term-rise" style={{ animationDelay: Math.min(index * 45, 400) + "ms", borderColor: isTop ? "rgba(127,230,184,.45)" : "var(--border)", boxShadow: isTop ? "0 0 0 1px rgba(127,230,184,.22), 0 0 28px rgba(127,230,184,.06)" : "none" }}>
       {isTop && (
         <div className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 9.5, fontWeight: 700, color: "var(--bg)", background: "var(--green-bright)", padding: "3px 8px 3px 6px", borderRadius: "0 0 9px 0", position: "absolute", top: 0, left: 0, letterSpacing: "0.06em" }}>
           <Crown size={11} /> BEST VALUE
@@ -426,7 +426,7 @@ export default function App() {
           </div>
 
           {!MARKET_API && (
-            <div className="mono" style={{ marginTop: 12, padding: "9px 12px", background: "rgba(255,194,75,.08)", border: "1px solid rgba(255,194,75,.35)", borderRadius: 9, fontSize: 10.5, color: "var(--amber)", lineHeight: 1.5 }}>
+            <div className="mono" style={{ marginTop: 12, padding: "9px 12px", background: "rgba(216,192,138,.08)", border: "1px solid rgba(216,192,138,.35)", borderRadius: 9, fontSize: 10.5, color: "var(--amber)", lineHeight: 1.5 }}>
               ⚠ Set <code>VITE_MARKET_API</code> in your <code>.env.local</code> (or in Vercel project settings) to connect to your backend and enable live pricing.
             </div>
           )}
@@ -506,19 +506,19 @@ function EmptyState({ onAdd, onSample }) {
 }
 
 const ROOT_VARS = {
-  "--bg": "#08090b", "--panel": "#0f1216", "--panel2": "#14181d", "--border": "#222831",
-  "--text": "#e9edf2", "--muted": "#878f99", "--faint": "#565d67",
-  "--green": "#34e89e", "--green-bright": "#4dffb0", "--amber": "#ffc24b",
-  "--red": "#ff6b6b", "--cyan": "#5cd6ff",
+  "--bg": "#071B1E", "--panel": "#0A2A28", "--panel2": "#103F46", "--border": "#1C4F54",
+  "--text": "#F2EDE1", "--muted": "#AFC4BA", "--faint": "#6F8881",
+  "--green": "#5FCFA0", "--green-bright": "#7FE6B8", "--amber": "#D8C08A",
+  "--red": "#C45B5B", "--cyan": "#D8C08A",
 };
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
-.apex-root{min-height:100vh;background-color:var(--bg);background-image:radial-gradient(120% 65% at 50% -12%, rgba(77,255,176,.07), transparent 58%),linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);background-size:100% 100%, 30px 30px, 30px 30px;color:var(--text);font-family:'IBM Plex Mono', ui-monospace, monospace;-webkit-font-smoothing:antialiased;}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+.apex-root{min-height:100vh;background-color:var(--bg);background-image:radial-gradient(120% 65% at 50% -12%, rgba(127,230,184,.06), transparent 58%),linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);background-size:100% 100%, 30px 30px, 30px 30px;color:var(--text);font-family:'IBM Plex Mono', ui-monospace, monospace;-webkit-font-smoothing:antialiased;}
 .apex-root *{box-sizing:border-box;}
-.apex-root ::selection{background:rgba(77,255,176,.25);}
+.apex-root ::selection{background:rgba(127,230,184,.22);}
 .mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
-.disp{font-family:'Bricolage Grotesque', system-ui, sans-serif;}
+.disp{font-family:'Cormorant Garamond', serif;letter-spacing:0.01em;}
 .term-card{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;overflow:hidden;}
 .iconbtn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:transparent;border:1px solid transparent;cursor:pointer;transition:.15s;}
 .iconbtn:hover{background:var(--panel2);border-color:var(--border);color:var(--text);}
@@ -526,23 +526,23 @@ const CSS = `
 .linkbtn{background:none;border:none;padding:0;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.04em;}
 .seg{background:var(--panel);color:var(--muted);border:1px solid var(--border);border-radius:9px;padding:9px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:.15s;}
 .seg:hover{color:var(--text);}
-.seg[data-on="true"]{background:rgba(77,255,176,.1);border-color:rgba(77,255,176,.5);color:var(--green-bright);}
+.seg[data-on="true"]{background:rgba(127,230,184,.1);border-color:rgba(127,230,184,.5);color:var(--green-bright);}
 .term-input{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:11px 12px;font-family:'IBM Plex Mono',monospace;font-size:16px;outline:none;transition:.15s;}
 .term-input::placeholder{color:var(--faint);}
-.term-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(92,214,255,.16);}
+.term-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(216,192,138,.16);}
 .primary{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--green-bright);color:#04120c;border:none;border-radius:11px;padding:13px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:.15s;}
 .primary:hover{filter:brightness(1.06);}
 .primary:disabled{opacity:.4;cursor:default;}
 .primary.danger{background:var(--red);color:#1a0606;}
-.fab{display:inline-flex;align-items:center;gap:7px;background:var(--green-bright);color:#04120c;border:none;border-radius:14px;padding:13px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;box-shadow:0 8px 26px rgba(77,255,176,.32);transition:.15s;}
+.fab{display:inline-flex;align-items:center;gap:7px;background:var(--green-bright);color:#04120c;border:none;border-radius:14px;padding:13px 18px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;box-shadow:0 8px 26px rgba(127,230,184,.28);transition:.15s;}
 .fab:hover{filter:brightness(1.06);}
-.overlay{position:fixed;inset:0;background:rgba(4,5,7,.72);backdrop-filter:blur(3px);z-index:55;}
+.overlay{position:fixed;inset:0;background:rgba(7,27,30,.72);backdrop-filter:blur(3px);z-index:55;}
 .sheet{background:var(--panel);border:1px solid var(--border);border-bottom:none;border-radius:20px 20px 0 0;box-shadow:0 -16px 50px rgba(0,0,0,.5);}
 .modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 16px 50px rgba(0,0,0,.55);}
 .scanbar{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--border) 0%,var(--green-bright) 50%,var(--border) 100%);background-size:200% 100%;animation:term-scan 1.1s linear infinite;}
 .livedot{width:7px;height:7px;border-radius:7px;background:var(--green-bright);box-shadow:0 0 8px var(--green-bright);animation:term-pulse 1.4s ease-in-out infinite;}
 .caret{display:inline-block;width:9px;height:18px;background:var(--green-bright);margin-left:1px;animation:term-blink 1.1s steps(1) infinite;vertical-align:-2px;}
-.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(15,18,22,.7);padding:9px 0;}
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(10,42,40,.7);padding:9px 0;}
 .ticker-track{display:flex;width:max-content;animation:term-marquee 34s linear infinite;}
 .ticker-wrap:hover .ticker-track{animation-play-state:paused;}
 .ticker-seg{display:flex;}
